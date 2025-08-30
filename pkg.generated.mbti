@@ -1,0 +1,57 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "username/bitset"
+
+// Values
+fn max_capacity() -> UInt
+
+// Errors
+pub suberror BitSetError String
+
+// Types and methods
+type BitSet
+fn BitSet::all(Self) -> Bool
+fn BitSet::any(Self) -> Bool
+fn BitSet::clear(Self, UInt) -> Unit
+fn BitSet::clear_all(Self) -> Unit
+fn BitSet::clone(Self) -> Self
+fn BitSet::compact(Self) -> Unit
+fn BitSet::complement(Self) -> Self
+fn BitSet::copy_full(Self, Self) -> Unit
+fn BitSet::copy_to(Self, Self) -> UInt
+fn BitSet::count(Self) -> UInt
+fn BitSet::delete_at(Self, UInt) -> Unit
+fn BitSet::difference(Self, Self) -> Self
+fn BitSet::empty() -> Self
+fn BitSet::equal(Self, Self) -> Bool
+fn BitSet::flip(Self, UInt) -> Unit raise
+fn BitSet::flip_range(Self, UInt, UInt) -> Unit raise
+fn BitSet::get_word64_at_bit(Self, UInt) -> UInt64
+fn BitSet::in_place_difference(Self, Self) -> Unit
+fn BitSet::in_place_intersection_fixed(Self, Self) -> Unit
+fn BitSet::in_place_symmetric_difference(Self, Self) -> Unit
+fn BitSet::in_place_union(Self, Self) -> Unit
+fn BitSet::insert_at(Self, UInt) -> Unit
+fn BitSet::intersection(Self, Self) -> Self
+fn BitSet::is_strict_superset(Self, Self) -> Bool
+fn BitSet::is_superset(Self, Self) -> Bool
+fn BitSet::len(Self) -> UInt
+fn BitSet::new(UInt) -> Self
+fn BitSet::next_clear(Self, UInt) -> (UInt, Bool)
+fn BitSet::next_set(Self, UInt) -> (UInt, Bool)
+fn BitSet::none(Self) -> Bool
+fn BitSet::ones_between(Self, UInt, UInt) -> UInt
+fn BitSet::previous_clear(Self, UInt) -> (UInt, Bool)
+fn BitSet::previous_set_fixed(Self, UInt) -> (UInt, Bool)
+fn BitSet::set(Self, UInt) -> Unit raise
+fn BitSet::set_all(Self) -> Unit
+fn BitSet::set_to(Self, UInt, Bool) -> Unit raise
+fn BitSet::shrink(Self, UInt) -> Unit
+fn BitSet::symmetric_difference(Self, Self) -> Self
+fn BitSet::test_bit(Self, UInt) -> Bool
+fn BitSet::to_string(Self) -> String
+fn BitSet::union(Self, Self) -> Self
+
+// Type aliases
+
+// Traits
+
