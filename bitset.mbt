@@ -35,6 +35,7 @@ const AllBits : UInt64 = 0xffffffffffffffff_UL
 /// The internal representation is abstracted away from users.
 struct BitSet {
   mut length : UInt
+  // TODO: change to FixedArray for better performance
   mut set : Array[UInt64]
 }
 
