@@ -138,11 +138,12 @@ pub fn test_bit(self : BitSet, i : UInt) -> Bool {
 /// Use cascading operator for chaining: `bs..set(10)..set(20)..set(30)`
 pub fn BitSet::set(self : BitSet, i : UInt) -> Unit raise {
   if i >= self.length {
-    self.extend_set( i)
+    self.extend_set(i)
   }
   let word_idx = (i >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
   let bit_idx = words_index(i)
-  self.set[word_idx] = self.set[word_idx] | (1UL << bit_idx.reinterpret_as_int())
+  self.set[word_idx] = self.set[word_idx] |
+    (1UL << bit_idx.reinterpret_as_int())
 }
 
 ///|
@@ -154,7 +155,8 @@ pub fn BitSet::clear(self : BitSet, i : UInt) -> Unit {
   } else {
     let word_idx = (i >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
     let bit_idx = words_index(i)
-    self.set[word_idx] = self.set[word_idx] & (1UL << bit_idx.reinterpret_as_int()).lnot()
+    self.set[word_idx] = self.set[word_idx] &
+      (1UL << bit_idx.reinterpret_as_int()).lnot()
   }
 }
 
@@ -180,7 +182,8 @@ pub fn BitSet::flip(self : BitSet, i : UInt) -> Unit raise {
   } else {
     let word_idx = (i >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
     let bit_idx = words_index(i)
-    self.set[word_idx] = self.set[word_idx] ^ (1UL << bit_idx.reinterpret_as_int())
+    self.set[word_idx] = self.set[word_idx] ^
+      (1UL << bit_idx.reinterpret_as_int())
   }
 }
 
@@ -295,7 +298,7 @@ pub fn in_place_intersection_fixed(self : BitSet, other : BitSet) -> Unit {
     self.set[i] = 0UL
   }
   if other.length > 0 && other.length - 1 >= self.length {
-    self.extend_set( other.length - 1) catch {
+    self.extend_set(other.length - 1) catch {
       _ => ()
     }
   }
@@ -306,7 +309,7 @@ pub fn in_place_intersection_fixed(self : BitSet, other : BitSet) -> Unit {
 pub fn in_place_union(self : BitSet, other : BitSet) -> Unit {
   let l = other.word_count().min(self.word_count())
   if other.length > 0 && other.length - 1 >= self.length {
-    self.extend_set( other.length - 1) catch {
+    self.extend_set(other.length - 1) catch {
       _ => ()
     }
   }
@@ -337,7 +340,7 @@ pub fn in_place_difference(self : BitSet, other : BitSet) -> Unit {
 pub fn in_place_symmetric_difference(self : BitSet, other : BitSet) -> Unit {
   let l = other.word_count().min(self.word_count())
   if other.length > 0 && other.length - 1 >= self.length {
-    self.extend_set( other.length - 1) catch {
+    self.extend_set(other.length - 1) catch {
       _ => ()
     }
   }
@@ -543,7 +546,8 @@ pub fn next_set(self : BitSet, i : UInt) -> (UInt, Bool) {
       for idx = x + 1; idx < self.set.length() && not(found); idx = idx + 1 {
         let word = self.set[idx]
         if word != 0UL {
-          result = ((idx << Log2WordSize.reinterpret_as_int()) + trailing_zeros64(word)).reinterpret_as_uint()
+          result = ((idx << Log2WordSize.reinterpret_as_int()) +
+          trailing_zeros64(word)).reinterpret_as_uint()
           found = true
         }
       }
@@ -574,7 +578,8 @@ pub fn next_clear(self : BitSet, i : UInt) -> (UInt, Bool) {
       for idx = x + 1; idx < self.set.length() && not(found); idx = idx + 1 {
         let word = self.set[idx]
         if word != AllBits {
-          let index = (idx * WordSize.reinterpret_as_int() + trailing_zeros64(word.lnot())).reinterpret_as_uint()
+          let index = (idx * WordSize.reinterpret_as_int() +
+          trailing_zeros64(word.lnot())).reinterpret_as_uint()
           if index < self.length {
             result = index
             found = true
@@ -671,7 +676,7 @@ pub fn flip_range(self : BitSet, start : UInt, end : UInt) -> Unit raise {
     return
   }
   if end - 1 >= self.length {
-    self.extend_set( end - 1)
+    self.extend_set(end - 1)
   }
   let start_word = (start >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
   let end_word = (end >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
@@ -686,7 +691,8 @@ pub fn flip_range(self : BitSet, start : UInt, end : UInt) -> Unit raise {
   // Handle endWord special
   let end_mask_idx = words_index(end.lnot() + 1)
   if end_mask_idx != 0 {
-    self.set[end_word] = self.set[end_word] ^ (AllBits >> end_mask_idx.reinterpret_as_int())
+    self.set[end_word] = self.set[end_word] ^
+      (AllBits >> end_mask_idx.reinterpret_as_int())
   }
 }
 
@@ -709,7 +715,10 @@ pub fn shrink(self : BitSet, last_bit_index : UInt) -> Unit {
   let last_word_used_bits = length % WordSize
   if last_word_used_bits != 0 && idx > 0 {
     self.set[idx - 1] = self.set[idx - 1] &
-      (AllBits >> (WordSize - words_index(last_word_used_bits)).reinterpret_as_int())
+      (
+        AllBits >>
+        (WordSize - words_index(last_word_used_bits)).reinterpret_as_int()
+      )
   }
 }
 
@@ -780,7 +789,8 @@ pub fn get_word64_at_bit(self : BitSet, i : UInt) -> UInt64 {
   // The next word, masked to only include the necessary bits and shifted to cover the
   // top of the word
   let second_word = if first_word_index + 1 < self.set.length() {
-    self.set[first_word_index + 1] << (WordSize - sub_word_index).reinterpret_as_int()
+    self.set[first_word_index + 1] <<
+    (WordSize - sub_word_index).reinterpret_as_int()
   } else {
     0UL
   }
@@ -841,7 +851,8 @@ pub fn ones_between(self : BitSet, from : UInt, to : UInt) -> UInt {
   // 2a: Count bits in first word (from start_offset to end of word)
   if start_word < self.set.length() {
     let start_mask = (1UL << start_offset.reinterpret_as_int()).lnot().lnot() // Mask for bits >= start_offset
-    count = count + popcount64(self.set[start_word] & start_mask).reinterpret_as_uint()
+    count = count +
+      popcount64(self.set[start_word] & start_mask).reinterpret_as_uint()
   }
 
   // 2b: Count all bits in complete words between start and end
@@ -856,7 +867,8 @@ pub fn ones_between(self : BitSet, from : UInt, to : UInt) -> UInt {
   // 2c: Count bits in last word (from start of word to end_offset)
   if end_offset > 0 && end_word < self.set.length() {
     let end_mask = (1UL << end_offset.reinterpret_as_int()) - 1UL // Mask for bits < end_offset
-    count = count + popcount64(self.set[end_word] & end_mask).reinterpret_as_uint()
+    count = count +
+      popcount64(self.set[end_word] & end_mask).reinterpret_as_uint()
   }
   count
 }
