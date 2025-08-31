@@ -106,8 +106,8 @@ test "iteration methods" {
   let (_, found3) = bs.next_set(36)
   inspect(found3, content="false")
 
-  // Test previous_set_fixed
-  let (prev, found_prev) = bs.previous_set_fixed(30)
+  // Test previous_set
+  let (prev, found_prev) = bs.previous_set(30)
   inspect(found_prev, content="true")
   inspect(prev, content="25")
 }

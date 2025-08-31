@@ -594,7 +594,7 @@ pub fn next_clear(self : BitSet, i : UInt) -> (UInt, Bool) {
 ///|
 /// Find the previous set bit from the specified index, including possibly the current index
 /// Returns (index, found) where found is true if a set bit was found
-pub fn previous_set_fixed(self : BitSet, i : UInt) -> (UInt, Bool) {
+pub fn previous_set(self : BitSet, i : UInt) -> (UInt, Bool) {
   let x = (i >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
   if x >= self.set.length() {
     (0, false)

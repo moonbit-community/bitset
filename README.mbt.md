@@ -48,7 +48,9 @@ test "basic bit operations" {
   
   // Set some bits (chainable operations)
   try {
-    ignore(bs.set!(10).set!(20).set!(30))
+    bs.set(10)
+    bs.set(20)
+    bs.set(30)
   } catch {
     _ => ()
   }
@@ -59,7 +61,7 @@ test "basic bit operations" {
   inspect(bs.test_bit(20), content="true")   // bit 20 is set
   
   // Clear a bit
-  ignore(bs.clear(20))
+  bs.clear(20)
   inspect(bs.test_bit(20), content="false")  // bit 20 is now clear
   
   // Count set bits
@@ -76,8 +78,12 @@ test "set operations" {
   
   // Set up test data
   try {
-    ignore(bs1.set!(1).set!(3).set!(5))
-    ignore(bs2.set!(3).set!(5).set!(7))
+    bs1.set(1)
+    bs1.set(3)
+    bs1.set(5)
+    bs2.set(3)
+    bs2.set(5)
+    bs2.set(7)
   } catch {
     _ => ()
   }
@@ -113,7 +119,8 @@ test "bitset state queries" {
   
   // Set some bits in partial_bs
   try {
-    ignore(partial_bs.set!(2).set!(7))
+    partial_bs.set(2)
+    partial_bs.set(7)
   } catch {
     _ => ()
   }
@@ -121,7 +128,7 @@ test "bitset state queries" {
   // Set all bits in full_bs
   try {
     for i = 0; i < 5; i = i + 1 {
-      ignore(full_bs.set!(i.to_uint()))
+      full_bs.set(i.reinterpret_as_uint())
     }
   } catch {
     _ => ()
@@ -152,7 +159,9 @@ test "finding bits" {
   
   // Set bits at positions 5, 10, 15
   try {
-    ignore(bs.set!(5).set!(10).set!(15))
+    bs.set(5)
+    bs.set(10)
+    bs.set(15)
   } catch {
     _ => ()
   }
@@ -187,8 +196,8 @@ test "bit manipulation" {
   
   // Set bit to specific value
   try {
-    ignore(bs.set_to!(3, true))   // set bit 3
-    ignore(bs.set_to!(5, false))  // clear bit 5
+    bs.set_to(3, true)   // set bit 3
+    bs.set_to(5, false)  // clear bit 5
   } catch {
     _ => ()
   }
@@ -198,8 +207,8 @@ test "bit manipulation" {
   
   // Flip bits
   try {
-    ignore(bs.flip!(3))  // flip bit 3 (true -> false)
-    ignore(bs.flip!(5))  // flip bit 5 (false -> true)
+    bs.flip(3)  // flip bit 3 (true -> false)
+    bs.flip(5)  // flip bit 5 (false -> true)
   } catch {
     _ => ()
   }
@@ -216,7 +225,9 @@ test "clone and equality" {
   let bs1 = @bitset.BitSet::new(20)
   
   try {
-    ignore(bs1.set!(1).set!(5).set!(10))
+    bs1.set(1)
+    bs1.set(5)
+    bs1.set(10)
   } catch {
     _ => ()
   }
@@ -228,7 +239,7 @@ test "clone and equality" {
   inspect(bs1.equal(bs2), content="true")
   
   // Modify original
-  ignore(bs1.clear(5))
+  bs1.clear(5)
   
   // Should no longer be equal
   inspect(bs1.equal(bs2), content="false")
@@ -245,11 +256,11 @@ test "clone and equality" {
 
 - `BitSet::new(length : UInt) -> BitSet` - Create a new BitSet with hint for expected size
 - `BitSet::empty() -> BitSet` - Create an empty BitSet
-- `set!(self : BitSet, i : UInt) -> BitSet!` - Set bit i to 1 (chainable)
-- `clear(self : BitSet, i : UInt) -> BitSet` - Clear bit i to 0 (chainable)
+- `set(self : BitSet, i : UInt) -> Unit` - Set bit i to 1 (chainable with ..)
+- `clear(self : BitSet, i : UInt) -> Unit` - Clear bit i to 0 (chainable with ..)
 - `test_bit(self : BitSet, i : UInt) -> Bool` - Test if bit i is set
-- `flip!(self : BitSet, i : UInt) -> BitSet!` - Flip bit i (chainable)
-- `set_to!(self : BitSet, i : UInt, value : Bool) -> BitSet!` - Set bit i to value
+- `flip(self : BitSet, i : UInt) -> Unit` - Flip bit i (chainable with ..)
+- `set_to(self : BitSet, i : UInt, value : Bool) -> Unit` - Set bit i to value
 
 ### Size and Information
 

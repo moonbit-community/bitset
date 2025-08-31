@@ -41,7 +41,7 @@ fn BitSet::next_set(Self, UInt) -> (UInt, Bool)
 fn BitSet::none(Self) -> Bool
 fn BitSet::ones_between(Self, UInt, UInt) -> UInt
 fn BitSet::previous_clear(Self, UInt) -> (UInt, Bool)
-fn BitSet::previous_set_fixed(Self, UInt) -> (UInt, Bool)
+fn BitSet::previous_set(Self, UInt) -> (UInt, Bool)
 fn BitSet::set(Self, UInt) -> Unit raise
 fn BitSet::set_all(Self) -> Unit
 fn BitSet::set_to(Self, UInt, Bool) -> Unit raise
