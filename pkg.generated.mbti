@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "username/bitset"
+package "Yu-zh/bitset"
 
 // Values
 fn max_capacity() -> UInt

@@ -2,7 +2,7 @@
   "is-main": true,
   "import": [
     {
-      "path": "username/bitset",
+      "path": "Yu-zh/bitset",
       "alias": "lib"
     }
   ]
