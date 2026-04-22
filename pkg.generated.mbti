@@ -2,54 +2,56 @@
 package "Yu-zh/bitset"
 
 // Values
-fn max_capacity() -> UInt
+pub fn max_capacity() -> UInt
 
 // Errors
-pub suberror BitSetError String
+pub suberror BitSetError {
+  BitSetError(String)
+}
 
 // Types and methods
 type BitSet
-fn BitSet::all(Self) -> Bool
-fn BitSet::any(Self) -> Bool
-fn BitSet::clear(Self, UInt) -> Unit
-fn BitSet::clear_all(Self) -> Unit
-fn BitSet::clone(Self) -> Self
-fn BitSet::compact(Self) -> Unit
-fn BitSet::complement(Self) -> Self
-fn BitSet::copy_full(Self, Self) -> Unit
-fn BitSet::copy_to(Self, Self) -> UInt
-fn BitSet::count(Self) -> UInt
-fn BitSet::delete_at(Self, UInt) -> Unit
-fn BitSet::difference(Self, Self) -> Self
-fn BitSet::empty() -> Self
-fn BitSet::equal(Self, Self) -> Bool
-fn BitSet::flip(Self, UInt) -> Unit raise
-fn BitSet::flip_range(Self, UInt, UInt) -> Unit raise
-fn BitSet::get_word64_at_bit(Self, UInt) -> UInt64
-fn BitSet::in_place_difference(Self, Self) -> Unit
-fn BitSet::in_place_intersection_fixed(Self, Self) -> Unit
-fn BitSet::in_place_symmetric_difference(Self, Self) -> Unit
-fn BitSet::in_place_union(Self, Self) -> Unit
-fn BitSet::insert_at(Self, UInt) -> Unit
-fn BitSet::intersection(Self, Self) -> Self
-fn BitSet::is_strict_superset(Self, Self) -> Bool
-fn BitSet::is_superset(Self, Self) -> Bool
-fn BitSet::len(Self) -> UInt
-fn BitSet::new(UInt) -> Self
-fn BitSet::next_clear(Self, UInt) -> (UInt, Bool)
-fn BitSet::next_set(Self, UInt) -> (UInt, Bool)
-fn BitSet::none(Self) -> Bool
-fn BitSet::ones_between(Self, UInt, UInt) -> UInt
-fn BitSet::previous_clear(Self, UInt) -> (UInt, Bool)
-fn BitSet::previous_set(Self, UInt) -> (UInt, Bool)
-fn BitSet::set(Self, UInt) -> Unit raise
-fn BitSet::set_all(Self) -> Unit
-fn BitSet::set_to(Self, UInt, Bool) -> Unit raise
-fn BitSet::shrink(Self, UInt) -> Unit
-fn BitSet::symmetric_difference(Self, Self) -> Self
-fn BitSet::test_bit(Self, UInt) -> Bool
-fn BitSet::to_string(Self) -> String
-fn BitSet::union(Self, Self) -> Self
+pub fn BitSet::all(Self) -> Bool
+pub fn BitSet::any(Self) -> Bool
+pub fn BitSet::clear(Self, UInt) -> Unit
+pub fn BitSet::clear_all(Self) -> Unit
+pub fn BitSet::clone(Self) -> Self
+pub fn BitSet::compact(Self) -> Unit
+pub fn BitSet::complement(Self) -> Self
+pub fn BitSet::copy_full(Self, Self) -> Unit
+pub fn BitSet::copy_to(Self, Self) -> UInt
+pub fn BitSet::count(Self) -> UInt
+pub fn BitSet::delete_at(Self, UInt) -> Unit
+pub fn BitSet::difference(Self, Self) -> Self
+pub fn BitSet::empty() -> Self
+pub fn BitSet::equal(Self, Self) -> Bool
+pub fn BitSet::flip(Self, UInt) -> Unit raise
+pub fn BitSet::flip_range(Self, UInt, UInt) -> Unit raise
+pub fn BitSet::get_word64_at_bit(Self, UInt) -> UInt64
+pub fn BitSet::in_place_difference(Self, Self) -> Unit
+pub fn BitSet::in_place_intersection_fixed(Self, Self) -> Unit
+pub fn BitSet::in_place_symmetric_difference(Self, Self) -> Unit
+pub fn BitSet::in_place_union(Self, Self) -> Unit
+pub fn BitSet::insert_at(Self, UInt) -> Unit
+pub fn BitSet::intersection(Self, Self) -> Self
+pub fn BitSet::is_strict_superset(Self, Self) -> Bool
+pub fn BitSet::is_superset(Self, Self) -> Bool
+pub fn BitSet::len(Self) -> UInt
+pub fn BitSet::new(UInt) -> Self
+pub fn BitSet::next_clear(Self, UInt) -> (UInt, Bool)
+pub fn BitSet::next_set(Self, UInt) -> (UInt, Bool)
+pub fn BitSet::none(Self) -> Bool
+pub fn BitSet::ones_between(Self, UInt, UInt) -> UInt
+pub fn BitSet::previous_clear(Self, UInt) -> (UInt, Bool)
+pub fn BitSet::previous_set(Self, UInt) -> (UInt, Bool)
+pub fn BitSet::set(Self, UInt) -> Unit raise
+pub fn BitSet::set_all(Self) -> Unit
+pub fn BitSet::set_to(Self, UInt, Bool) -> Unit raise
+pub fn BitSet::shrink(Self, UInt) -> Unit
+pub fn BitSet::symmetric_difference(Self, Self) -> Self
+pub fn BitSet::test_bit(Self, UInt) -> Bool
+pub fn BitSet::to_string(Self) -> String
+pub fn BitSet::union(Self, Self) -> Self
 
 // Type aliases
 
