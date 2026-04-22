@@ -271,7 +271,7 @@ pub fn BitSet::complement(self : BitSet) -> BitSet {
 ///|
 /// Clean last word by setting unused bits to 0
 fn BitSet::clean_last_word(self : BitSet) -> Unit {
-  if not(self.is_len_exact_multiple()) {
+  if !self.is_len_exact_multiple() {
     let last_idx = self.set.length() - 1
     if last_idx >= 0 {
       self.set[last_idx] = self.set[last_idx] &
@@ -429,7 +429,7 @@ pub fn BitSet::none(self : BitSet) -> Bool {
 ///|
 /// Any returns true if any bit is set, false otherwise
 pub fn BitSet::any(self : BitSet) -> Bool {
-  not(self.none())
+  !self.none()
 }
 
 ///|
@@ -543,7 +543,7 @@ pub fn BitSet::next_set(self : BitSet, i : UInt) -> (UInt, Bool) {
       // Process the following full words until next bit is set
       let mut found = false
       let mut result = 0U
-      for idx = x + 1; idx < self.set.length() && not(found); idx = idx + 1 {
+      for idx = x + 1; idx < self.set.length() && !found; idx = idx + 1 {
         let word = self.set[idx]
         if word != 0UL {
           result = ((idx << Log2WordSize.reinterpret_as_int()) +
@@ -575,7 +575,7 @@ pub fn BitSet::next_clear(self : BitSet, i : UInt) -> (UInt, Bool) {
       // Process the following full words until next bit is cleared
       let mut found = false
       let mut result = 0U
-      for idx = x + 1; idx < self.set.length() && not(found); idx = idx + 1 {
+      for idx = x + 1; idx < self.set.length() && !found; idx = idx + 1 {
         let word = self.set[idx]
         if word != AllBits {
           let index = (idx * WordSize.reinterpret_as_int() +
@@ -614,7 +614,7 @@ pub fn BitSet::previous_set(self : BitSet, i : UInt) -> (UInt, Bool) {
       // Search in previous words
       let mut found = false
       let mut result = 0U
-      for idx = x - 1; idx >= 0 && not(found); idx = idx - 1 {
+      for idx = x - 1; idx >= 0 && !found; idx = idx - 1 {
         let word = self.set[idx]
         if word != 0UL {
           result = (idx << Log2WordSize.reinterpret_as_int()).reinterpret_as_uint() +
@@ -653,7 +653,7 @@ pub fn BitSet::previous_clear(self : BitSet, i : UInt) -> (UInt, Bool) {
       // Search in previous words
       let mut found = false
       let mut result = 0U
-      for idx = x - 1; idx >= 0 && not(found); idx = idx - 1 {
+      for idx = x - 1; idx >= 0 && !found; idx = idx - 1 {
         let word = self.set[idx].lnot()
         if word != 0UL {
           result = (idx << Log2WordSize.reinterpret_as_int()).reinterpret_as_uint() +
