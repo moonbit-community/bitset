@@ -41,7 +41,9 @@ struct BitSet {
 
 ///|
 /// Error type for BitSet operations
-pub suberror BitSetError { BitSetError(String) }
+pub suberror BitSetError {
+  BitSetError(String)
+}
 
 ///|
 /// Calculate the number of words needed for i bits
@@ -288,7 +290,10 @@ fn BitSet::is_len_exact_multiple(self : BitSet) -> Bool {
 
 ///|
 /// In-place intersection operation
-pub fn BitSet::in_place_intersection_fixed(self : BitSet, other : BitSet) -> Unit {
+pub fn BitSet::in_place_intersection_fixed(
+  self : BitSet,
+  other : BitSet,
+) -> Unit {
   let l = other.word_count().min(self.word_count())
   for i = 0; i < l; i = i + 1 {
     self.set[i] = self.set[i] & other.set[i]
@@ -337,7 +342,10 @@ pub fn BitSet::in_place_difference(self : BitSet, other : BitSet) -> Unit {
 
 ///|
 /// In-place symmetric difference operation
-pub fn BitSet::in_place_symmetric_difference(self : BitSet, other : BitSet) -> Unit {
+pub fn BitSet::in_place_symmetric_difference(
+  self : BitSet,
+  other : BitSet,
+) -> Unit {
   let l = other.word_count().min(self.word_count())
   if other.length > 0 && other.length - 1 >= self.length {
     self.extend_set(other.length - 1) catch {
@@ -671,7 +679,11 @@ pub fn BitSet::previous_clear(self : BitSet, i : UInt) -> (UInt, Bool) {
 /// Flip a range of bits in [start, end).
 /// Warning: using a very large value for 'end' may lead to a memory shortage and a panic.
 /// Use cascading operator for chaining: `bs..flip_range(10, 20)..set(30)`
-pub fn BitSet::flip_range(self : BitSet, start : UInt, end : UInt) -> Unit raise {
+pub fn BitSet::flip_range(
+  self : BitSet,
+  start : UInt,
+  end : UInt,
+) -> Unit raise {
   if start >= end {
     return
   }
