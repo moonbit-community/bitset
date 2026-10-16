@@ -1,0 +1,13 @@
+name = "Yu-zh/bitset"
+
+version = "0.1.0"
+
+readme = "README.md"
+
+repository = "https://github.com/moonbit-community/bitset"
+
+license = "Apache-2.0"
+
+keywords = [ "bitset" ]
+
+description = "MoonBit package implementing bitsets"
