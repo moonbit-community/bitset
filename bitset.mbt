@@ -16,15 +16,15 @@
 
 ///|
 /// The word size of a bit set
-const WordSize : UInt = 64
+const WordSize : UInt32 = 64
 
 ///|
 /// word_mask is word_size-1, used for bit indexing in a word
-const WordMask : UInt = WordSize - 1
+const WordMask : UInt32 = WordSize - 1
 
 ///|
 /// log2_word_size is lg(word_size)
-const Log2WordSize : UInt = 6
+const Log2WordSize : UInt32 = 6
 
 ///|
 /// all_bits has every bit set
@@ -34,7 +34,7 @@ const AllBits : UInt64 = 0xffffffffffffffff_UL
 /// A BitSet is a set of bits. The zero value of a BitSet is an empty set of length 0.
 /// The internal representation is abstracted away from users.
 struct BitSet {
-  mut length : UInt
+  mut length : UInt32
   // TODO: change to FixedArray for better performance
   mut set : Array[UInt64]
 }
@@ -47,7 +47,7 @@ pub suberror BitSetError {
 
 ///|
 /// Calculate the number of words needed for i bits
-fn words_needed(i : UInt) -> Int {
+fn words_needed(i : UInt32) -> Int32 {
   let cap = max_capacity()
   if i > cap - WordMask {
     (cap >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
@@ -59,46 +59,46 @@ fn words_needed(i : UInt) -> Int {
 ///|
 /// Calculate the number of words needed for i bits, possibly exceeding the capacity.
 /// This function is useful if you know that the capacity cannot be exceeded.
-fn words_needed_unbound(i : UInt) -> Int {
+fn words_needed_unbound(i : UInt32) -> Int32 {
   (i.reinterpret_as_int() + WordMask.reinterpret_as_int()) >>
   Log2WordSize.reinterpret_as_int()
 }
 
 ///|
 /// Calculate the index of words in a UInt64
-fn words_index(i : UInt) -> UInt {
+fn words_index(i : UInt32) -> UInt32 {
   i & WordMask
 }
 
 ///|
 /// Return the total possible capacity, or number of bits that can be stored in the BitSet theoretically.
-pub fn max_capacity() -> UInt {
+pub fn max_capacity() -> UInt32 {
   0xFFFFFFFF_U // Maximum UInt value
 }
 
 ///|
 /// Create a new BitSet with a hint that length bits will be required.
 /// The memory usage is at least length/8 bytes.
-pub fn BitSet::new(length : UInt) -> BitSet {
-  { length, set: Array::make(words_needed(length), 0UL) }
+pub fn BitSet::new(length : UInt32) -> BitSet {
+  { length, set: Array::make(words_needed(length), 0UL), }
 }
 
 ///|
 /// Create a new empty BitSet.
 pub fn BitSet::empty() -> BitSet {
-  { length: 0, set: [] }
+  { length: 0, set: [], }
 }
 
 ///|
 /// Return the number of bits in the BitSet.
 /// Note that it differs from count function.
-pub fn BitSet::len(self : BitSet) -> UInt {
+pub fn BitSet::len(self : BitSet) -> UInt32 {
   self.length
 }
 
 ///|
 /// Extend the BitSet to incorporate new bits if needed
-fn BitSet::extend_set(self : BitSet, i : UInt) -> Unit raise {
+fn BitSet::extend_set(self : BitSet, i : UInt32) -> Unit raise {
   if i >= max_capacity() {
     raise BitSetError("You are exceeding the capacity")
   }
@@ -123,7 +123,7 @@ fn BitSet::extend_set(self : BitSet, i : UInt) -> Unit raise {
 
 ///|
 /// Test whether bit i is set.
-pub fn BitSet::test_bit(self : BitSet, i : UInt) -> Bool {
+pub fn BitSet::test_bit(self : BitSet, i : UInt32) -> Bool {
   if i >= self.length {
     false
   } else {
@@ -138,7 +138,7 @@ pub fn BitSet::test_bit(self : BitSet, i : UInt) -> Bool {
 /// Warning: using a very large value for 'i' may lead to a memory shortage and a panic.
 /// The memory usage is at least slightly over i/8 bytes.
 /// Use cascading operator for chaining: `bs..set(10)..set(20)..set(30)`
-pub fn BitSet::set(self : BitSet, i : UInt) -> Unit raise {
+pub fn BitSet::set(self : BitSet, i : UInt32) -> Unit raise {
   if i >= self.length {
     self.extend_set(i)
   }
@@ -151,7 +151,7 @@ pub fn BitSet::set(self : BitSet, i : UInt) -> Unit raise {
 ///|
 /// Clear bit i to 0. This never causes a memory allocation. It is always safe.
 /// Use cascading operator for chaining: `bs..clear(10)..clear(20)..clear(30)`
-pub fn BitSet::clear(self : BitSet, i : UInt) -> Unit {
+pub fn BitSet::clear(self : BitSet, i : UInt32) -> Unit {
   if i >= self.length {
     ()
   } else {
@@ -166,7 +166,7 @@ pub fn BitSet::clear(self : BitSet, i : UInt) -> Unit {
 /// Set bit i to value.
 /// Warning: using a very large value for 'i' may lead to a memory shortage and a panic.
 /// Use cascading operator for chaining: `bs..set_to(10, true)..set_to(20, false)`
-pub fn BitSet::set_to(self : BitSet, i : UInt, value : Bool) -> Unit raise {
+pub fn BitSet::set_to(self : BitSet, i : UInt32, value : Bool) -> Unit raise {
   if value {
     self.set(i)
   } else {
@@ -178,7 +178,7 @@ pub fn BitSet::set_to(self : BitSet, i : UInt, value : Bool) -> Unit raise {
 /// Flip bit at i.
 /// Warning: using a very large value for 'i' may lead to a memory shortage and a panic.
 /// Use cascading operator for chaining: `bs..flip(10)..flip(20)..flip(30)`
-pub fn BitSet::flip(self : BitSet, i : UInt) -> Unit raise {
+pub fn BitSet::flip(self : BitSet, i : UInt32) -> Unit raise {
   if i >= self.length {
     self.set(i)
   } else {
@@ -201,7 +201,7 @@ fn sort_by_length(a : BitSet, b : BitSet) -> (BitSet, BitSet) {
 
 ///|
 /// Get the word count for a BitSet
-fn BitSet::word_count(self : BitSet) -> Int {
+fn BitSet::word_count(self : BitSet) -> Int32 {
   words_needed_unbound(self.length)
 }
 
@@ -212,7 +212,7 @@ pub fn BitSet::clone(self : BitSet) -> BitSet {
   for i = 0; i < self.set.length(); i = i + 1 {
     new_set[i] = self.set[i]
   }
-  { length: self.length, set: new_set }
+  { length: self.length, set: new_set, }
 }
 
 ///|
@@ -367,7 +367,7 @@ pub fn BitSet::in_place_symmetric_difference(
 
 ///|
 /// Count the number of set bits in a UInt64 (population count)
-fn popcount64(x : UInt64) -> Int {
+fn popcount64(x : UInt64) -> Int32 {
   // Brian Kernighan's algorithm
   let mut count = 0
   let mut n = x
@@ -390,7 +390,7 @@ fn popcount_slice(slice : Array[UInt64]) -> UInt64 {
 
 ///|
 /// Count (number of set bits). Also known as "popcount" or "population count".
-pub fn BitSet::count(self : BitSet) -> UInt {
+pub fn BitSet::count(self : BitSet) -> UInt32 {
   if self.set.length() > 0 {
     popcount_slice(self.set).to_uint()
   } else {
@@ -499,7 +499,7 @@ pub fn BitSet::is_strict_superset(self : BitSet, other : BitSet) -> Bool {
 
 ///|
 /// Count trailing zeros in a UInt64 (similar to bits.TrailingZeros64 in Go)
-fn trailing_zeros64(x : UInt64) -> Int {
+fn trailing_zeros64(x : UInt64) -> Int32 {
   if x == 0UL {
     64
   } else {
@@ -515,7 +515,7 @@ fn trailing_zeros64(x : UInt64) -> Int {
 
 ///|
 /// Count leading zeros in a UInt64
-fn leading_zeros64(x : UInt64) -> Int {
+fn leading_zeros64(x : UInt64) -> Int32 {
   if x == 0UL {
     64
   } else {
@@ -531,14 +531,14 @@ fn leading_zeros64(x : UInt64) -> Int {
 
 ///|
 /// Calculate the bit length of a UInt64 (number of bits needed to represent the value)
-fn bit_len64(x : UInt64) -> Int {
+fn bit_len64(x : UInt64) -> Int32 {
   64 - leading_zeros64(x)
 }
 
 ///|
 /// Find the next set bit from the specified index, including possibly the current index
 /// Returns (index, found) where found is true if a set bit was found
-pub fn BitSet::next_set(self : BitSet, i : UInt) -> (UInt, Bool) {
+pub fn BitSet::next_set(self : BitSet, i : UInt32) -> (UInt32, Bool) {
   let x = (i >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
   if x >= self.set.length() {
     (0, false)
@@ -567,7 +567,7 @@ pub fn BitSet::next_set(self : BitSet, i : UInt) -> (UInt, Bool) {
 ///|
 /// Find the next clear bit from the specified index, including possibly the current index
 /// Returns (index, found) where found is true if a clear bit was found
-pub fn BitSet::next_clear(self : BitSet, i : UInt) -> (UInt, Bool) {
+pub fn BitSet::next_clear(self : BitSet, i : UInt32) -> (UInt32, Bool) {
   let x = (i >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
   if x >= self.set.length() {
     (0, false)
@@ -602,7 +602,7 @@ pub fn BitSet::next_clear(self : BitSet, i : UInt) -> (UInt, Bool) {
 ///|
 /// Find the previous set bit from the specified index, including possibly the current index
 /// Returns (index, found) where found is true if a set bit was found
-pub fn BitSet::previous_set(self : BitSet, i : UInt) -> (UInt, Bool) {
+pub fn BitSet::previous_set(self : BitSet, i : UInt32) -> (UInt32, Bool) {
   let x = (i >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
   if x >= self.set.length() {
     (0, false)
@@ -639,7 +639,7 @@ pub fn BitSet::previous_set(self : BitSet, i : UInt) -> (UInt, Bool) {
 ///|
 /// Find the previous clear bit from the specified index, including possibly the current index
 /// Returns (index, found) where found is true if a clear bit was found
-pub fn BitSet::previous_clear(self : BitSet, i : UInt) -> (UInt, Bool) {
+pub fn BitSet::previous_clear(self : BitSet, i : UInt32) -> (UInt32, Bool) {
   let x = (i >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
   if x >= self.set.length() {
     (0, false)
@@ -681,8 +681,8 @@ pub fn BitSet::previous_clear(self : BitSet, i : UInt) -> (UInt, Bool) {
 /// Use cascading operator for chaining: `bs..flip_range(10, 20)..set(30)`
 pub fn BitSet::flip_range(
   self : BitSet,
-  start : UInt,
-  end : UInt,
+  start : UInt32,
+  end : UInt32,
 ) -> Unit raise {
   if start >= end {
     return
@@ -712,7 +712,7 @@ pub fn BitSet::flip_range(
 /// Shrink BitSet so that the provided value is the last possible set value.
 /// It clears all bits > the provided index and reduces the size and length of the set.
 /// Use cascading operator for chaining: `bs..shrink(100)..set(50)`
-pub fn BitSet::shrink(self : BitSet, last_bit_index : UInt) -> Unit {
+pub fn BitSet::shrink(self : BitSet, last_bit_index : UInt32) -> Unit {
   let length = last_bit_index + 1
   let idx = words_needed(length)
   if idx > self.set.length() {
@@ -757,7 +757,7 @@ pub fn BitSet::compact(self : BitSet) -> Unit {
 ///|
 /// Copy into a destination BitSet using the Go array copy semantics.
 /// Returns the number of bits copied in the destination BitSet.
-pub fn BitSet::copy_to(self : BitSet, dest : BitSet) -> UInt {
+pub fn BitSet::copy_to(self : BitSet, dest : BitSet) -> UInt32 {
   if dest.set.length() == 0 {
     return 0
   }
@@ -787,7 +787,7 @@ pub fn BitSet::copy_full(self : BitSet, dest : BitSet) -> Unit {
 
 ///|
 /// Get a word (64 bits) at the specified bit position
-pub fn BitSet::get_word64_at_bit(self : BitSet, i : UInt) -> UInt64 {
+pub fn BitSet::get_word64_at_bit(self : BitSet, i : UInt32) -> UInt64 {
   let first_word_index = (i >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
   let sub_word_index = words_index(i)
 
@@ -839,7 +839,11 @@ pub fn BitSet::to_string(self : BitSet) -> String {
 
 ///|
 /// Count bits set between [from, to). Returns 0 if from >= to.
-pub fn BitSet::ones_between(self : BitSet, from : UInt, to : UInt) -> UInt {
+pub fn BitSet::ones_between(
+  self : BitSet,
+  from : UInt32,
+  to : UInt32,
+) -> UInt32 {
   if from >= to {
     return 0
   }
@@ -888,7 +892,7 @@ pub fn BitSet::ones_between(self : BitSet, from : UInt, to : UInt) -> UInt {
 ///|
 /// Delete a bit at the given index position, shifting all bits to the right of it left by 1
 /// Use cascading operator for chaining: `bs..delete_at(10)..set(20)`
-pub fn BitSet::delete_at(self : BitSet, i : UInt) -> Unit {
+pub fn BitSet::delete_at(self : BitSet, i : UInt32) -> Unit {
   if i >= self.length {
     return
   }
@@ -921,7 +925,7 @@ pub fn BitSet::delete_at(self : BitSet, i : UInt) -> Unit {
 ///|
 /// Insert a bit at the given index, shifting all bits at and after that position to the right by 1
 /// Use cascading operator for chaining: `bs..insert_at(10)..set(20)`
-pub fn BitSet::insert_at(self : BitSet, idx : UInt) -> Unit {
+pub fn BitSet::insert_at(self : BitSet, idx : UInt32) -> Unit {
   let insert_at_element = (idx >> Log2WordSize.reinterpret_as_int()).reinterpret_as_int()
 
   // if length of set is a multiple of word_size we need to allocate more space first

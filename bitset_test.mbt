@@ -1,8 +1,8 @@
 ///|
 test "basic bitset creation and operations" {
-  let bs = BitSet::new(100)
+  let bs = @bitset.BitSet::new(100)
   inspect(bs.len(), content="100")
-  let empty = BitSet::empty()
+  let empty = @bitset.BitSet::empty()
   inspect(empty.len(), content="0")
 
   // Test setting and testing bits
@@ -24,8 +24,8 @@ test "basic bitset creation and operations" {
 
 ///|
 test "bitwise operations" {
-  let bs1 = BitSet::new(64)
-  let bs2 = BitSet::new(64)
+  let bs1 = @bitset.BitSet::new(64)
+  let bs2 = @bitset.BitSet::new(64)
   try {
     bs1..set(1)..set(3).set(5)
     bs2..set(2)..set(3).set(6)
@@ -60,7 +60,7 @@ test "bitwise operations" {
 
 ///|
 test "utility functions" {
-  let bs = BitSet::new(64)
+  let bs = @bitset.BitSet::new(64)
   bs..set(1)..set(3)..set(5).set(7) catch {
     _ => ()
   }
@@ -72,13 +72,13 @@ test "utility functions" {
   inspect(bs.any(), content="true")
   inspect(bs.all(), content="false")
   inspect(bs.none(), content="false")
-  let empty = BitSet::empty()
+  let empty = @bitset.BitSet::empty()
   inspect(empty.any(), content="false")
   inspect(empty.none(), content="true")
   inspect(empty.all(), content="true")
 
   // Test equality
-  let bs2 = BitSet::new(64)
+  let bs2 = @bitset.BitSet::new(64)
   bs2..set(1)..set(3)..set(5).set(7) catch {
     _ => ()
   }
@@ -91,7 +91,7 @@ test "utility functions" {
 
 ///|
 test "iteration methods" {
-  let bs = BitSet::new(100)
+  let bs = @bitset.BitSet::new(100)
   bs..set(5)..set(15)..set(25).set(35) catch {
     _ => ()
   }
@@ -114,7 +114,7 @@ test "iteration methods" {
 
 ///|
 test "range operations" {
-  let bs = BitSet::new(100)
+  let bs = @bitset.BitSet::new(100)
 
   // Test flip_range
   bs.flip_range(10, 20) catch {
@@ -133,7 +133,7 @@ test "range operations" {
 
 ///|
 test "clone and copy operations" {
-  let bs1 = BitSet::new(64)
+  let bs1 = @bitset.BitSet::new(64)
   bs1..set(10)..set(20).set(30) catch {
     _ => ()
   }
@@ -153,7 +153,7 @@ test "clone and copy operations" {
 
 ///|
 test "complement operation" {
-  let bs = BitSet::new(8)
+  let bs = @bitset.BitSet::new(8)
   bs..set(1)..set(3).set(5) catch {
     _ => ()
   }
@@ -170,7 +170,7 @@ test "complement operation" {
 
 ///|
 test "set operations with cascading" {
-  let bs = BitSet::new(64)
+  let bs = @bitset.BitSet::new(64)
   // Test cascading
   bs..set(10)..set(20).flip(30) catch {
     _ => ()
@@ -189,9 +189,9 @@ test "set operations with cascading" {
 
 ///|
 test "string representation" {
-  let empty = BitSet::empty()
+  let empty = @bitset.BitSet::empty()
   inspect(empty.to_string(), content="{}")
-  let bs = BitSet::new(64)
+  let bs = @bitset.BitSet::new(64)
   bs..set(1)..set(3).set(5) catch {
     _ => ()
   }
